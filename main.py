@@ -84,6 +84,7 @@ class Pizza(ABC):
         print("Пицца упаковалась")
 
 
+
 class BBQ_Pizza(Pizza, Mixin_Spicy):
     name = 'Барбекю'
 
@@ -159,38 +160,19 @@ class Terminal:
             print(f" -Добавка: {self.order[i].get_filling}")
         print('------------------------------')
 
-    def cancel_position(self, num_position):
-        delete = self.order.pop(num_position-1)
+    def cancel_position(self):
+        print('Выберите номер позиции для удаления: ')
+        ans = int(input('>>> '))
+        delete = self.order.pop(ans-1)
         print(f'Позиция {delete.name} удалена')
 
-
-# p1 = BBQ_Pizza()
-# p2 = BBQ_Pizza()
-# p3 = Pepperoni()
-# p2.get_size()
-# p3.get_size()
-# p2.attention()
-# p2.make_pizza()
-
-t1 = Terminal()
-while True:
-    menu = Terminal.menu
-    menu_pizza = Terminal.menu_pizza
-    print('Выберите действие: ')
-    for i in range(len(menu)):
-        print(f'{i + 1}.{menu[i]}')
-    responce = input('>>> ')
-    if responce == '1':
-        Terminal.show_menu_pizza(menu_pizza)
-        print('Выберите номер продукта: ')
-        choose_pizza_num = int(input('>>> '))
+    def change_compound(self, choose_pizza_num):
         print('Хотите изменить состав пиццы?(+/-)')
         compound_ans = input('>>> ')
         choose_pizza = menu_pizza[choose_pizza_num - 1]()
         if compound_ans == '-':
             pass
         elif compound_ans == '+':
-
             print('Стандартная добавка: ')
             print(f"Тесто: {choose_pizza.get_dough}")
             print(f"Соус: {choose_pizza.get_sauce}")
@@ -212,14 +194,32 @@ while True:
                 Terminal.show_fillings()
                 new_fillings = input('>>> ')
                 choose_pizza.set_fillings = new_fillings
+        return choose_pizza
+
+
+t1 = Terminal()
+while True:
+    menu = Terminal.menu
+    menu_pizza = Terminal.menu_pizza
+    print('Выберите действие: ')
+    for i in range(len(menu)):
+        print(f'{i + 1}.{menu[i]}')
+    responce = input('>>> ')
+    if responce == '1':
+        Terminal.show_menu_pizza(menu_pizza)
+        print('Выберите номер продукта: ')
+        choose_pizza_num = int(input('>>> '))
+        choose_pizza = t1.change_compound(choose_pizza_num)
         t1.make_order(choose_pizza)
 
     elif responce == '2':
         t1.show_order()
     elif responce == '3':
         t1.show_order()
-        print('Выберите номер позиции для удаления: ')
-        ans = input('>>> ')
-        t1.cancel_position(int(ans))
+        t1.cancel_position()
     elif responce == '4':
+        print("Спасибо за заказ! Его уже начали готовить!")
+        for i in t1.order:
+            i.make_pizza()
+        print('Ваши пиццы готовы! Приятного аппетита!')
         break
