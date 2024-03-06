@@ -151,9 +151,17 @@ class Terminal:
         self.order += [choose_pizza]
 
     def show_order(self):
-        print(self.order)
-        for i in self.order:
-            print(i.name)
+        print('------------------------------')
+        for i in range(len(self.order)):
+            print(f"{i+1}.{self.order[i].name}")
+            print(f" -Тесто: {self.order[i].get_dough}")
+            print(f" -Соус: {self.order[i].get_sauce}")
+            print(f" -Добавка: {self.order[i].get_filling}")
+        print('------------------------------')
+
+    def cancel_position(self, num_position):
+        delete = self.order.pop(num_position-1)
+        print(f'Позиция {delete.name} удалена')
 
 
 # p1 = BBQ_Pizza()
@@ -164,9 +172,8 @@ class Terminal:
 # p2.attention()
 # p2.make_pizza()
 
-
+t1 = Terminal()
 while True:
-    t1 = Terminal()
     menu = Terminal.menu
     menu_pizza = Terminal.menu_pizza
     print('Выберите действие: ')
@@ -205,11 +212,14 @@ while True:
                 Terminal.show_fillings()
                 new_fillings = input('>>> ')
                 choose_pizza.set_fillings = new_fillings
-
-
         t1.make_order(choose_pizza)
-        t1.show_order()
+
     elif responce == '2':
         t1.show_order()
+    elif responce == '3':
+        t1.show_order()
+        print('Выберите номер позиции для удаления: ')
+        ans = input('>>> ')
+        t1.cancel_position(int(ans))
     elif responce == '4':
         break
